@@ -10,6 +10,9 @@
  *
  * The test data has examples of what these partial regions would look like.
  */
+
+const DISTANCE_LIMIT = 1;
+
 export namespace TextMergeJoin {
 
     export interface IPDFTextWord {
@@ -25,7 +28,30 @@ export namespace TextMergeJoin {
      *
      */
     export function doMergeWords(data: ReadonlyArray<IPDFTextWord>): ReadonlyArray<IPDFTextWord> {
-        return [];
+        // Please, add more explanations to task descriptions
+        // It was hard to figure out what has to be done
+        
+        const result: IPDFTextWord[] = [];
+        for (let i = 1; i <= data.length; i++) {
+            const previous = data[i - 1];
+            const current = data[i]
+
+            if (current && current.x - previous.x - previous.width < DISTANCE_LIMIT) {
+                result.push({
+                    ...previous,
+                    width: previous.width + current.width,
+                    str: previous.str + current.str
+                });
+
+                i++;
+                continue;
+            }
+
+            result.push(previous);
+        }
+
+        console.log(result)
+        return result;
     }
 
 }
